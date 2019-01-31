@@ -7,13 +7,14 @@ import (
 )
 
 func main() {
-	//beego.Router("/light", &controllers.LightController{}, "post:Post", "get:Get")
-	beego.Router("/light", &controllers.LightController{})
+	//beego.Router("/light", &controllers.DomoticaController{}, "post:Post", "get:Get")
+	beego.Router("/", &controllers.DomoticaController{})
 
 	beego.BConfig.Listen.EnableHTTPS = true
-	beego.BConfig.Listen.HTTPSPort = 10443
-	beego.BConfig.Listen.HTTPSCertFile = "/home/sparrow/workspace/go/src/github.com/giovannicammarata/simple_home/resources/conf/host.crt"
-	beego.BConfig.Listen.HTTPSKeyFile = "/home/sparrow/workspace/go/src/github.com/giovannicammarata/simple_home/resources/conf/host.key"
+	beego.BConfig.Listen.HTTPPort = 60001
+	beego.BConfig.Listen.HTTPSPort = 60002
+	beego.BConfig.Listen.HTTPSCertFile = "conf/host.crt"
+	beego.BConfig.Listen.HTTPSKeyFile = "conf/host.key"
 	beego.BConfig.CopyRequestBody = true
 
 	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
