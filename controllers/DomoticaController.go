@@ -4,9 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/giovannicammarata/simple_home/models"
-	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -14,30 +12,9 @@ type DomoticaController struct {
 	BaseController
 }
 
-var config models.DomoticaConfiguration
-
-func init() {
-	jsonFile, err := os.Open("conf/configuration.json")
-	// if we os.Open returns an error then handle it
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened users.json")
-	// defer the closing of our jsonFile so that we can parse it later on
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var config2 models.DomoticaConfiguration
-	json.Unmarshal([]byte(byteValue), &config2)
-	json.Unmarshal([]byte(byteValue), &config)
-	fmt.Println("Loaded config", config)
-}
+var Config *models.DomoticaConfiguration
 
 func (this *DomoticaController) Post() {
-
-	//jsoninfo := this.GetString("jsoninfo")
-	//fmt.Println("", jsoninfo)
 
 	body := this.Ctx.Input.RequestBody
 	var request models.DomoticaRequest
@@ -45,13 +22,13 @@ func (this *DomoticaController) Post() {
 
 	fmt.Println("command ", request.Entity, request.Target, request.Cmd)
 
-	entityConfiguration := config.Entities[request.Entity]
+	entityConfiguration := Config.Entities[request.Entity]
 
 	command := entityConfiguration.Commands[request.Cmd]
 	targetEnv := entityConfiguration.Env[request.Target]
 
 	var newCommand = replace(command, targetEnv)
-	newCommand = replace(newCommand, config.SystemParameters)
+	newCommand = replace(newCommand, Config.SystemParameters)
 	fmt.Println("Executing", newCommand)
 
 	_, err := http.Get(newCommand)
