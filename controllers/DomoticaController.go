@@ -14,6 +14,9 @@ type DomoticaController struct {
 
 var Config *models.DomoticaConfiguration
 
+//
+// Executes the request by forwarding it to the bridge
+//
 func (this *DomoticaController) Post() {
 
 	body := this.Ctx.Input.RequestBody
@@ -31,7 +34,7 @@ func (this *DomoticaController) Post() {
 	newCommand = replace(newCommand, Config.SystemParameters)
 	fmt.Println("Executing", newCommand)
 
-	_, err := http.Get(newCommand)
+	_, err := http.Get(newCommand) // Executes the HTTP request to the bridge
 
 	var code = 200
 	if err != nil {
@@ -39,11 +42,12 @@ func (this *DomoticaController) Post() {
 		fmt.Println(err)
 	}
 
-	this.Ctx.ResponseWriter.WriteHeader(code)
-	//this.Data["json"] = "{\"success\":\"ok\"}"
-	//this.ServeJSON()
+	this.Ctx.ResponseWriter.WriteHeader(code) // Return the response
 }
 
+//
+// Build the command
+//
 func replace(str string, values map[string]string) string {
 	for k, v := range values {
 		fmt.Println(k)
@@ -52,11 +56,4 @@ func replace(str string, values map[string]string) string {
 	}
 
 	return str
-}
-
-func (this *DomoticaController) Get() {
-	fmt.Println("received request")
-
-	this.Data["json"] = "{\"tst\":1}"
-	this.ServeJSON()
 }

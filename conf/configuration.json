@@ -3,7 +3,8 @@
     "http-port": 60001,
     "https-port": 60002,
     "https-key-file": "conf/host.key",
-    "https-cert-file": "conf/host.crt"
+    "https-cert-file": "conf/host.crt",
+    "token":""
   },
   "domotica": {
     "systemParameters": {

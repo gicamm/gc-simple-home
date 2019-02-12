@@ -25,4 +25,5 @@ type NetworkConfiguration struct {
 	HTTPSPort     int    `json:"https-port"`
 	HTTPSKeyFile  string `json:"https-key-file"`
 	HTTPSCertFile string `json:"https-cert-file"`
+	Token         string `json:"token"`
 }
