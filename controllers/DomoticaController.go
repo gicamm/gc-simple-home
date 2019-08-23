@@ -50,8 +50,6 @@ func (this *DomoticaController) Post() {
 //
 func replace(str string, values map[string]string) string {
 	for k, v := range values {
-		fmt.Println(k)
-		fmt.Println(v)
 		str = strings.Replace(str, "{"+k+"}", v, -1)
 	}
 
