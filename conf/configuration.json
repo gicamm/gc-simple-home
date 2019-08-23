@@ -25,8 +25,20 @@
             "id": "3",
             "type": "env"
           },
+          "lavanderia": {
+            "id": "6",
+            "type": "env"
+          },
           "bagno": {
             "id": "17",
+            "type": "env"
+          },
+          "cabina armadio": {
+            "id": "5",
+            "type": "env"
+          },
+          "cabina": {
+            "id": "5",
             "type": "env"
           },
           "salotto": {
@@ -37,9 +49,25 @@
             "id": "11",
             "type": "env"
           },
-          "casa": {
-            "id": "TODO scenario",
-            "type": "TODO scenario"
+          "bagno mansarda": {
+            "id": "14",
+            "type": "env"
+          },
+          "bagno 2": {
+            "id": "14",
+            "type": "env"
+          },
+          "ripostiglio mansarda": {
+            "id": "12",
+            "type": "env"
+          },
+          "ripostiglio due": {
+            "id": "12",
+            "type": "env"
+          },
+          "garage": {
+            "id": "16",
+            "type": "env"
           }
         }
       },
