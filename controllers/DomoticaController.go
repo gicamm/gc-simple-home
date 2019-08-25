@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/giovannicammarata/simple_home/models"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -23,23 +23,23 @@ func (this *DomoticaController) Post() {
 	var request models.DomoticaRequest
 	json.Unmarshal(body, &request)
 
-	fmt.Println("command ", request.Entity, request.Target, request.Cmd)
+	log.Println("command ", request.Entity, request.Target, request.Cmd)
 
-	entityConfiguration := Config.Entities[request.Entity]
+	entityConfiguration := (*Config.Entities)[request.Entity]
 
 	command := entityConfiguration.Commands[request.Cmd]
 	targetEnv := entityConfiguration.Env[request.Target]
 
 	var newCommand = replace(command, targetEnv)
 	newCommand = replace(newCommand, Config.SystemParameters)
-	fmt.Println("Executing", newCommand)
+	log.Println("executing", newCommand)
 
 	_, err := http.Get(newCommand) // Executes the HTTP request to the bridge
 
 	var code = 200
 	if err != nil {
 		code = 404
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	this.Ctx.ResponseWriter.WriteHeader(code) // Return the response

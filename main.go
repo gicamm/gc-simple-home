@@ -1,26 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/plugins/cors"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/fsnotify/fsnotify"
 	"github.com/giovannicammarata/simple_home/configurator"
 	"github.com/giovannicammarata/simple_home/controllers"
 	"github.com/giovannicammarata/simple_home/models"
+	"log"
 	"os"
 	"strings"
 )
 
-var config models.SystemConfiguration
+var config *models.SystemConfiguration
+var configFile string
 
 func main() {
 	argsWithoutProg := os.Args[1:]
 
-	confFile := "conf/configuration.json"
+	configFile = "conf/configuration.json"
 	if len(argsWithoutProg) > 0 {
-		confFile = argsWithoutProg[0]
+		configFile = argsWithoutProg[0]
 	}
 
 	// Authorization filter
@@ -37,11 +39,9 @@ func main() {
 	beego.InsertFilter("/*", beego.BeforeRouter, authFilter)
 	beego.Router("/", &controllers.DomoticaController{})
 
-	// load configuration from file
-	config = models.SystemConfiguration{}
-	configurator.LoadConfiguration(confFile, &config)
-	fmt.Println("Loaded config")
-	spew.Dump(config)
+	loadConfiguration()
+
+	go startFileWatcher()
 
 	// Enable HTTP/HTTPs
 	if config.Network.HTTPPort > 0 {
@@ -71,4 +71,71 @@ func main() {
 	controllers.Config = &config.Domotica
 
 	beego.Run() // start the router
+}
+
+func startFileWatcher() {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		log.Fatal("error starting the watcher", err)
+		os.Exit(2)
+	}
+	defer watcher.Close()
+
+	done := make(chan bool)
+	go func() {
+		for {
+			select {
+			case _, ok := <-watcher.Events:
+				if !ok {
+					return
+				}
+				loadConfiguration()
+			case err, ok := <-watcher.Errors:
+				if !ok {
+					return
+				}
+				log.Println("error in watcher:", err)
+			}
+		}
+	}()
+
+	err = watcher.Add(configFile)
+	if err != nil {
+		log.Fatal("error starting the watcher", err)
+	}
+	<-done
+}
+
+func loadConfiguration() {
+	log.Println("loading the configuration from", configFile)
+	// load configuration from file
+	configRaw := models.SystemConfiguration{}
+	err := configurator.LoadConfiguration(configFile, &configRaw)
+
+	if err != nil && config != nil {
+		log.Println("unable to load the configuration. Exiting")
+		os.Exit(3)
+	}
+
+	m2 := make(map[string]models.EntityConfiguration)
+	entities := configRaw.Domotica.Entities
+	for k, v := range *entities {
+		env := v.Env
+		m := make(map[string]map[string]string)
+		for k2, v2 := range env {
+			keys := strings.Split(k2, "|")
+			for _, key := range keys {
+				m[key] = v2
+			}
+		}
+
+		env = m
+		m2[k] = models.EntityConfiguration{Env: env, Commands: v.Commands}
+	}
+
+	configRaw.Domotica.Entities = &m2
+	config = &configRaw
+
+	log.Println("loaded config")
+	spew.Dump(config)
 }

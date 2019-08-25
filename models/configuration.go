@@ -6,8 +6,8 @@ type SystemConfiguration struct {
 }
 
 type DomoticaConfiguration struct {
-	SystemParameters map[string]string              `json:"systemParameters"`
-	Entities         map[string]EntityConfiguration `json:"entities"`
+	SystemParameters map[string]string               `json:"systemParameters"`
+	Entities         *map[string]EntityConfiguration `json:"entities"`
 }
 
 type EntityConfiguration struct {

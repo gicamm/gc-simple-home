@@ -2,17 +2,16 @@ package configurator
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
 func init() {
 }
 
-func LoadConfiguration(file string, v interface{}) {
+func LoadConfiguration(file string, v interface{}) (err error) {
 	var configuration []byte
-	var err error
 	var jsonFile *os.File
 	jsonFile, err = os.Open(file)
 	defer jsonFile.Close()
@@ -20,7 +19,8 @@ func LoadConfiguration(file string, v interface{}) {
 		configuration, err = ioutil.ReadAll(jsonFile)
 	}
 	if err != nil {
-		fmt.Println("Unable to load file from", file, err)
+		log.Println("unable to load configuration from", file, err)
 	}
 	json.Unmarshal([]byte(configuration), &v)
+	return
 }

@@ -49,19 +49,11 @@
             "id": "11",
             "type": "env"
           },
-          "bagno mansarda": {
+          "bagno mansarda|bagno 2": {
             "id": "14",
             "type": "env"
           },
-          "bagno 2": {
-            "id": "14",
-            "type": "env"
-          },
-          "ripostiglio mansarda": {
-            "id": "12",
-            "type": "env"
-          },
-          "ripostiglio due": {
+          "ripostiglio mansarda|ripostiglio due": {
             "id": "12",
             "type": "env"
           },
