@@ -26,19 +26,23 @@
             "type": "env"
           },
           "lavanderia": {
+            "id": "7",
+            "type": "env"
+          },
+          "bagno|bagno 1": {
+            "id": "12",
+            "type": "env"
+          },
+          "camera 1|camera matrimoniale": {
+            "id": "5",
+            "type": "env"
+          },
+          "cabina|cabina armadio": {
             "id": "6",
             "type": "env"
           },
-          "bagno": {
-            "id": "17",
-            "type": "env"
-          },
-          "cabina armadio": {
-            "id": "5",
-            "type": "env"
-          },
-          "cabina": {
-            "id": "5",
+          "camera 2": {
+            "id": "11",
             "type": "env"
           },
           "salotto": {
@@ -46,11 +50,15 @@
             "type": "num"
           },
           "studio": {
-            "id": "11",
+            "id": "12",
+            "type": "env"
+          },
+          "camera 3": {
+            "id": "14",
             "type": "env"
           },
           "bagno mansarda|bagno 2": {
-            "id": "14",
+            "id": "13",
             "type": "env"
           },
           "ripostiglio mansarda|ripostiglio due": {
@@ -58,6 +66,10 @@
             "type": "env"
           },
           "garage": {
+            "id": "14",
+            "type": "env"
+          },
+          "bagno 3|bagno garage": {
             "id": "16",
             "type": "env"
           }
