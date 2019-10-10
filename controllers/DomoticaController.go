@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/giovannicammarata/simple_home/models"
+	"github.com/giovannicammarata/gc-simple-home/models"
 	"log"
 	"net/http"
 	"strings"
