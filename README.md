@@ -256,9 +256,7 @@ services:
   ####
   gcsh:
     image: gcammarata/gcsh
-    networks:
-      gcsh_net:
-        ipv4_address: 172.99.0.99
+    network_mode: host
     restart: always
     volumes:
       - gcsh-conf:/root/conf
@@ -270,16 +268,5 @@ services:
 #========
 volumes:
   gcsh-conf:
-
-#========
-# Networks
-#========
-networks:
-  gcsh_net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.99.0.0/24
 ```
 Do not miss to edit the **conf/configuration.json** file inside the **gcsh-conf** volume.
