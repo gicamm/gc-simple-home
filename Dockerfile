@@ -23,6 +23,7 @@ WORKDIR /MultiStage
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o gcsh main.go
 
+RUN ls
 #----
 # GCSH stage
 #----
@@ -30,4 +31,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o gcsh main.go
 FROM alpine:latest
 WORKDIR /root/
 COPY --from=builder /MultiStage/gcsh .
+COPY --from=builder /MultiStage/conf ./conf
+RUN ls
+
 CMD ["./gcsh"]

@@ -18,6 +18,8 @@ var config *models.SystemConfiguration
 var configFile string
 
 func main() {
+	dir, _ := os.Getwd()
+	log.Println("working dir is ", dir)
 	argsWithoutProg := os.Args[1:]
 
 	configFile = "conf/configuration.json"
@@ -114,7 +116,7 @@ func loadConfiguration() {
 
 	if err != nil && config != nil {
 		log.Println("unable to load the configuration. Exiting")
-		os.Exit(3)
+		os.Exit(1)
 	}
 
 	m2 := make(map[string]models.EntityConfiguration)
