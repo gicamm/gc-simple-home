@@ -1,6 +1,6 @@
 ## Introduction
 
-Gc-simple-home (GCSH) implements a pretty REST server for the Comelit ecosystem (Simple Home, Vedo and VIP).
+Gc-simple-home (GCSH) implements a pretty REST server for the Comelit ecosystem (Simple Home, Vedo, and VIP).
 You can use the GCSH to enable the Voice Control (such as Amazon Alexa or Google Assistant) over the Comelit Simple Home (see the IFTTT section).
 
 ## How it works
@@ -23,8 +23,8 @@ You can create your custom env or command.
 GCSH loads the configuration at runtime.
 
 ### Most important parameters
-* network: includes the listening port, certificates and token (it can be blank, but it is recommended to set it).
-* domotica: it includes the **targetAddress** (the serial bridge address) . It also includes all "env" such as light, shutter, alarm, scenario and so on. You can create your custom env.
+* network: includes the listening port, certificates, and token (it can be blank, but it is recommended to set it).
+* domotica: it includes the **targetAddress** (the serial bridge address) . It also includes all "env" such as light, shutter, alarm, scenario, and so on. You can create your custom env.
 
 ### Configuration example
 `{
@@ -235,7 +235,7 @@ Start the container and expose the port:
 `docker run -d -i -t -p 60001:60001 --name gcsh gcammarata/gcsh`
 
 ### Edit the configuration file
-I suggest using a volume ant than edit the file inside it. In any case, you can pull the configuration.json file, edit it and push it to the container. GCSH will reload the configuration at runtime.
+I suggest using a volume ant than edit the file inside it. In any case, you can pull the configuration.json file, edit it, and push it to the container. GCSH will reload the configuration at runtime.
 
 #### Pull the file from the container
 `docker cp gcsh:/root/conf/configuration.json .`
@@ -246,7 +246,9 @@ I suggest using a volume ant than edit the file inside it. In any case, you can 
 ### Docker compose
 Below the **docker-compose.yml** file
 
-```version: '3'
+```
+version: '3'
+
 services:
 
   ####
@@ -280,3 +282,4 @@ networks:
       config:
         - subnet: 172.99.0.0/24
 ```
+Do not miss to edit the **conf/configuration.json** file inside the **gcsh-conf** volume.
