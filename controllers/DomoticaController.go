@@ -24,26 +24,26 @@ func (this *DomoticaController) Post() {
 	var request models.DomoticaRequest
 	json.Unmarshal(body, &request)
 
-	log.Println("command ", request.Entity, request.Target, request.Cmd)
-
 	entityConfiguration := (*Config.Entities)[request.Entity]
 
 	command := entityConfiguration.Commands[request.Cmd]
 	targetEnv := entityConfiguration.Env[request.Target]
 
-	var newCommand = replace(command, targetEnv)
-	newCommand = replace(newCommand, Config.SystemParameters)
-	log.Println("executing", newCommand)
+	command = replace(command, targetEnv)
+	command = replace(command, Config.SystemParameters)
 
 	var code = 400
-	if len(strings.TrimSpace(newCommand)) != 0 {
-		_, err := http.Get(newCommand) // Send the HTTP request to the bridge
+	if len(strings.TrimSpace(command)) > 0 {
+		log.Println("executing HTTP request:", command)
+		_, err := http.Get(command) // Send the HTTP request to the bridge
 
 		if err == nil {
 			code = 200
 		} else {
-			log.Println("error executing the request", body, string(debug.Stack()), err)
+			log.Println("error executing the request", string(body), string(debug.Stack()), err)
 		}
+	} else {
+		log.Println("not able to find the command. the request was", string(body))
 	}
 
 	this.Ctx.ResponseWriter.WriteHeader(code) // Return the response

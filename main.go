@@ -114,7 +114,7 @@ func loadConfiguration() {
 	configRaw := models.SystemConfiguration{}
 	err := configurator.LoadConfiguration(configFile, &configRaw)
 
-	if err != nil && config != nil {
+	if err != nil && config == nil {
 		log.Println("unable to load the configuration. Exiting")
 		os.Exit(1)
 	}
