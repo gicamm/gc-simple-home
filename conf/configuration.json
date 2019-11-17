@@ -4,7 +4,7 @@
     "https-port":60002,
     "https-key-file":"conf/host.key",
     "https-cert-file":"conf/host.crt",
-    "token":"EA8YpvgiN475TRYujKJs2XP1meQswg"
+    "token":""
   },
   "domotica":{
     "systemParameters":{

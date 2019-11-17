@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/plugins/cors"
@@ -29,12 +30,21 @@ func main() {
 
 	// Authorization filter
 	var authFilter = func(ctx *context.Context) {
-		token := ctx.Input.Header("Authorization")
-		if config.Network.Token == "" || strings.Compare(config.Network.Token, token) == 0 {
-			return
-		}
+		if strings.TrimSpace(config.Network.Token) != "" { // Check authorization
+			var token string
+			if token = ctx.Input.Header("Authorization"); token == "" { // Fetch the token from the header
+				body := ctx.Input.RequestBody
+				var request models.AuthorizedRequest
+				_ = json.Unmarshal(body, &request)
 
-		ctx.Abort(404, "")
+				token = request.Token // Fetch the token from the body
+			}
+
+			if strings.Compare(config.Network.Token, token) != 0 {
+				log.Println("received not authorized request from ", ctx.Request.RemoteAddr, "request was:", string(ctx.Input.RequestBody))
+				ctx.Abort(404, "")
+			}
+		}
 	}
 
 	// setup the beego router
@@ -68,6 +78,10 @@ func main() {
 	if beego.BConfig.RunMode == "dev" {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
+	}
+
+	if len(config.Network.Token) > 0 {
+		log.Println("enable authorization with token ", config.Network.Token)
 	}
 
 	controllers.Config = &config.Domotica
