@@ -5,6 +5,7 @@ import (
 	"github.com/giovannicammarata/gc-simple-home/models"
 	"log"
 	"net/http"
+	"runtime/debug"
 	"strings"
 )
 
@@ -34,12 +35,15 @@ func (this *DomoticaController) Post() {
 	newCommand = replace(newCommand, Config.SystemParameters)
 	log.Println("executing", newCommand)
 
-	_, err := http.Get(newCommand) // Executes the HTTP request to the bridge
+	var code = 400
+	if len(strings.TrimSpace(newCommand)) != 0 {
+		_, err := http.Get(newCommand) // Send the HTTP request to the bridge
 
-	var code = 200
-	if err != nil {
-		code = 404
-		log.Println(err)
+		if err == nil {
+			code = 200
+		} else {
+			log.Println("error executing the request", body, string(debug.Stack()), err)
+		}
 	}
 
 	this.Ctx.ResponseWriter.WriteHeader(code) // Return the response
